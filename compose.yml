@@ -1,0 +1,58 @@
+# Infraestrutura local. Somente dados fictícios. Não publicar estas senhas.
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: graduate
+      POSTGRES_PASSWORD: graduate_dev
+      POSTGRES_DB: graduate
+    ports:
+      - "127.0.0.1:5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U graduate -d graduate"]
+      interval: 5s
+      retries: 15
+  keycloak:
+    image: quay.io/keycloak/keycloak:26.0
+    command: start-dev --import-realm
+    environment:
+      KC_BOOTSTRAP_ADMIN_USERNAME: admin
+      KC_BOOTSTRAP_ADMIN_PASSWORD: admin_dev
+    ports:
+      - "127.0.0.1:8080:8080"
+    volumes:
+      - ./infra/keycloak/graduate-realm.json:/opt/keycloak/data/import/graduate-realm.json:ro
+  backend:
+    profiles: ["app"]
+    build: ./graduate-back
+    environment:
+      PORT: 3000
+      DATABASE_URL: postgresql://graduate:graduate_dev@postgres:5432/graduate?schema=public
+      KEYCLOAK_ISSUER: http://localhost:8080/realms/graduate
+      KEYCLOAK_JWKS_URL: http://keycloak:8080/realms/graduate/protocol/openid-connect/certs
+      KEYCLOAK_AUDIENCE: graduate-api
+      FRONTEND_ORIGIN: http://localhost:5173
+    ports:
+      - "127.0.0.1:3000:3000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      keycloak:
+        condition: service_started
+    command: sh -c "npx prisma db push && npm run db:seed && npm run dev"
+  frontend:
+    profiles: ["app"]
+    build: ./graduate-front
+    environment:
+      VITE_API_URL: http://localhost:3000/graduate/api/v1
+      VITE_KEYCLOAK_URL: http://localhost:8080
+      VITE_KEYCLOAK_REALM: graduate
+      VITE_KEYCLOAK_CLIENT_ID: graduate-front
+    ports:
+      - "127.0.0.1:5173:5173"
+    depends_on: [backend]
+    command: npm run dev -- --host 0.0.0.0
+volumes:
+  pgdata:

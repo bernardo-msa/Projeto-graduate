@@ -1,0 +1,81 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Uma matrícula pertence a um curso; disciplinas também pertencem a um curso.
+model Curso {
+  id                 String       @id @default(uuid()) @db.Uuid
+  codigo             String       @unique
+  nome               String
+  matriz             String
+  creditosTotais     Int
+  semestresPrevistos Int
+  alunos             Aluno[]
+  disciplinas        Disciplina[]
+}
+
+model Disciplina {
+  id          String      @id @default(uuid()) @db.Uuid
+  codigo      String
+  nome        String
+  creditos    Int
+  obrigatoria Boolean     @default(true)
+  cursoId     String      @db.Uuid
+  curso       Curso       @relation(fields: [cursoId], references: [id])
+  tentativas  Tentativa[]
+
+  @@unique([cursoId, codigo])
+  @@index([cursoId])
+}
+
+model Aluno {
+  id                   String        @id @default(uuid()) @db.Uuid
+  matricula            String        @unique
+  nome                 String
+  email                String?
+  periodoIngresso      String
+  modalidadeIngresso   String        @default("Não informada")
+  cr                   Float         @default(0)
+  creditosConcluidos   Int           @default(0)
+  cursoId              String        @db.Uuid
+  curso                Curso         @relation(fields: [cursoId], references: [id])
+  tentativas           Tentativa[]
+  atendimentos         Atendimento[]
+  criadoEm             DateTime      @default(now())
+
+  @@index([cursoId])
+}
+
+// Uma tentativa é UMA oferta cursada de UMA disciplina em UM período.
+model Tentativa {
+  id           String      @id @default(uuid()) @db.Uuid
+  alunoId      String      @db.Uuid
+  disciplinaId String      @db.Uuid
+  periodo      String
+  nota         Float?
+  frequencia   Float?
+  situacao     String
+  aluno        Aluno       @relation(fields: [alunoId], references: [id], onDelete: Cascade)
+  disciplina   Disciplina  @relation(fields: [disciplinaId], references: [id])
+
+  @@unique([alunoId, disciplinaId, periodo])
+  @@index([disciplinaId])
+}
+
+// Registro do que o NEAP fez; não é um laudo ou parecer automático.
+model Atendimento {
+  id         String   @id @default(uuid()) @db.Uuid
+  alunoId    String   @db.Uuid
+  aluno      Aluno    @relation(fields: [alunoId], references: [id], onDelete: Cascade)
+  tipo       String
+  descricao  String
+  registradoPor String
+  criadoEm   DateTime @default(now())
+
+  @@index([alunoId])
+}
