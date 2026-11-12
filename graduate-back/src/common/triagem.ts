@@ -11,18 +11,56 @@ export function triagem(aluno: AlunoCompleto) {
   const reprovadas = aluno.tentativas.filter((t) =>
     t.situacao === 'REPROVADO_NOTA' || t.situacao === 'REPROVADO_FALTA',
   );
-  const contagem = new Map<string, number>();
-  for (const tentativa of reprovadas) {
-    if (tentativa.disciplina.obrigatoria) {
-      const id = tentativa.disciplinaId;
-      contagem.set(id, (contagem.get(id) ?? 0) + 1);
+  const reprovacoesPorDisciplina = new Map<
+    string,
+    {
+      codigo: string;
+      nome: string;
+      obrigatoria: boolean;
+      quantidadeReprovacoes: number;
+      tentativas: {
+        periodo: string;
+        situacao: string;
+      }[];
     }
+  >();
+
+  for (const tentativa of reprovadas) {
+    const disciplina = tentativa.disciplina;
+    const id = tentativa.disciplinaId;
+
+    if (!reprovacoesPorDisciplina.has(id)) {
+      reprovacoesPorDisciplina.set(id, {
+        codigo: disciplina.codigo,
+        nome: disciplina.nome,
+        obrigatoria: disciplina.obrigatoria,
+        quantidadeReprovacoes: 0,
+        tentativas: [],
+      });
+    }
+
+    const registro = reprovacoesPorDisciplina.get(id)!;
+
+    registro.quantidadeReprovacoes++;
+
+    registro.tentativas.push({
+      periodo: tentativa.periodo,
+      situacao: tentativa.situacao,
+    });
   }
-  const repetencia = [...contagem.values()].some((qtd) => qtd >= 2);
+
+  const detalhesReprovacoes = [...reprovacoesPorDisciplina.values()];
+
+  const repetencia = detalhesReprovacoes.some(
+    (disciplina) =>
+      disciplina.obrigatoria &&
+      disciplina.quantidadeReprovacoes >= 2,
+  );
   const situacao = repetencia ? 'POSSIVEL_EP'
     : reprovadas.length > 0 ? 'ATENCAO' : 'REGULAR';
   return {
     situacao,
+    reprovacoesPorDisciplina: detalhesReprovacoes,
     percentualConcluido: aluno.curso.creditosTotais > 0
       ? Math.round(aluno.creditosConcluidos / aluno.curso.creditosTotais * 1000) / 10 : 0,
     evidencias: {
