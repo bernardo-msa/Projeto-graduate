@@ -89,13 +89,91 @@ export function AlunoDetalhe({ id, onClose, onChanged }: { id: string; onClose: 
               <label>Frequência (0 a 100%)<input type="number" min="0" max="100" step="0.1" value={frequencia} onChange={(e) => setFrequencia(e.target.value)} /></label></div>
             <button disabled={salvando || !disciplinas.data?.length} className="btn primary">Registrar tentativa</button>
           </form></>}
-        {aba === 'ep' && <><div className="notice">{aluno.triagem.aviso}</div>
-          <h3>Critérios para análise</h3><div className="details-list criteria">
-            <div>2+ reprovações no mesmo componente obrigatório <strong>{aluno.triagem.evidencias.duasReprovacoesMesmaDisciplina ? 'Indício identificado' : 'Não identificado na base'}</strong></div>
-            <div>Reprovação em todos os componentes do último semestre <strong>Não avaliado</strong></div>
-            <div>CR inferior ao limite em dois semestres <strong>Não avaliado</strong></div>
-            <div>Esgotamento do prazo de integralização <strong>Não avaliado</strong></div>
-          </div><p className="muted">Não haver indício cadastrado não comprova ausência de elegibilidade. A decisão cabe ao NEAP.</p></>}
+        {aba === 'ep' && <>
+        <div className="notice">{aluno.triagem.aviso}</div>
+
+        <h3>Critérios para análise</h3>
+
+        <div className="details-list criteria">
+          <div>
+            2+ reprovações no mesmo componente obrigatório
+            <strong>
+              {aluno.triagem.evidencias.duasReprovacoesMesmaDisciplina
+                ? 'Indício identificado'
+                : 'Não identificado na base'}
+            </strong>
+          </div>
+
+          <div>
+            Reprovação em todos os componentes do último semestre
+            <strong>Não avaliado</strong>
+          </div>
+
+          <div>
+            CR inferior ao limite em dois semestres
+            <strong>Não avaliado</strong>
+          </div>
+
+          <div>
+            Esgotamento do prazo de integralização
+            <strong>Não avaliado</strong>
+          </div>
+        </div>
+
+        <h3>Reprovações registradas</h3>
+
+        {aluno.triagem.reprovacoesPorDisciplina.length > 0 ? (
+          <div className="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Disciplina</th>
+                  <th>Obrigatória</th>
+                  <th>Reprovações</th>
+                  <th>Tentativas reprovadas</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                {aluno.triagem.reprovacoesPorDisciplina.map((disciplina) => (
+                  <tr key={disciplina.codigo}>
+                    <td>
+                      <strong>{disciplina.nome}</strong>
+                      <br />
+                      <span className="muted">{disciplina.codigo}</span>
+                    </td>
+
+                    <td>{disciplina.obrigatoria ? 'Sim' : 'Não'}</td>
+
+                    <td>{disciplina.quantidadeReprovacoes}</td>
+
+                    <td>
+                      {disciplina.tentativas.map((tentativa, index) => (
+                        <div key={`${tentativa.periodo}-${index}`}>
+                          {tentativa.periodo} — {
+                            tentativa.situacao === 'REPROVADO_NOTA'
+                              ? 'Por nota'
+                              : 'Por falta'
+                          }
+                        </div>
+                      ))}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          <p className="muted">
+            Nenhuma reprovação registrada no histórico disponível.
+          </p>
+        )}
+
+        <p className="muted">
+          Não haver indício cadastrado não comprova ausência de elegibilidade.
+          A decisão cabe ao NEAP.
+        </p>
+      </>}
         {aba === 'atendimentos' && <><h3>Registros de acompanhamento</h3>
           {aluno.atendimentos?.length ? aluno.atendimentos.map((r) => <div className="card record" key={r.id}>
             <strong>{r.tipo}</strong><span className="muted"> • {new Date(r.criadoEm).toLocaleString('pt-BR')} • {r.registradoPor}</span>
