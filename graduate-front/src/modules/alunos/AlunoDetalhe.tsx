@@ -59,10 +59,26 @@ export function AlunoDetalhe({ id, onClose, onChanged }: { id: string; onClose: 
           .map(([value,label]) => <button key={value} className={`tab ${aba === value ? 'selected' : ''}`} onClick={() => { setAba(value); setFeedback(''); }}>{label}</button>)}
       </div><div className="drawer-body">
         {aba === 'visao' && <><div className="mini-stats">
-          <div><small>CR registrado</small><strong>{aluno.cr.toFixed(1).replace('.',',')}</strong></div>
-          <div><small>Créditos</small><strong>{aluno.creditosConcluidos}/{aluno.curso.creditosTotais}</strong></div>
-          <div><small>Triagem</small><Status value={aluno.triagem.situacao}/></div>
-        </div><div className="card spaced"><h3>Integralização curricular</h3>
+          <div>
+            <small>CR registrado</small>
+            <strong>{aluno.cr.toFixed(1).replace('.', ',')}</strong>
+          </div>
+
+          <div>
+            <small>Créditos</small>
+            <strong>{aluno.creditosConcluidos}/{aluno.curso.creditosTotais}</strong>
+          </div>
+
+          <div>
+            <small>Triagem</small>
+            <Status value={aluno.triagem.situacao}/>
+          </div>
+
+          <div>
+            <small>Reprovações registradas</small>
+            <strong>{aluno.triagem.totalReprovacoes}</strong>
+          </div>
+          </div><div className="card spaced"><h3>Integralização curricular</h3>
           <div className="progress-track"><div style={{ width: `${Math.min(100,aluno.triagem.percentualConcluido)}%` }} /></div>
           <p>{aluno.triagem.percentualConcluido}% dos créditos concluídos</p>
           <div className="details-list"><div>Curso <strong>{aluno.curso.nome}</strong></div>
