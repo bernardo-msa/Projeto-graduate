@@ -60,9 +60,11 @@ export function triagem(aluno: AlunoCompleto) {
     : reprovadas.length > 0 ? 'ATENCAO' : 'REGULAR';
   return {
     situacao,
+    totalReprovacoes: reprovadas.length, // NOVA LINHA
     reprovacoesPorDisciplina: detalhesReprovacoes,
     percentualConcluido: aluno.curso.creditosTotais > 0
-      ? Math.round(aluno.creditosConcluidos / aluno.curso.creditosTotais * 1000) / 10 : 0,
+      ? Math.round(aluno.creditosConcluidos / aluno.curso.creditosTotais * 1000) / 10
+      : 0,
     evidencias: {
       duasReprovacoesMesmaDisciplina: repetencia,
       todasReprovadasUltimoSemestre: null,
