@@ -58,13 +58,19 @@ export function triagem(aluno: AlunoCompleto) {
   );
   const situacao = repetencia ? 'POSSIVEL_EP'
     : reprovadas.length > 0 ? 'ATENCAO' : 'REGULAR';
-  return {
+    return {
     situacao,
-    totalReprovacoes: reprovadas.length, // NOVA LINHA
+    totalReprovacoes: reprovadas.length,
+
+    creditosPendentes: Math.max(
+      0,
+      aluno.curso.creditosTotais - aluno.creditosConcluidos,
+    ),
+
     reprovacoesPorDisciplina: detalhesReprovacoes,
     percentualConcluido: aluno.curso.creditosTotais > 0
       ? Math.round(aluno.creditosConcluidos / aluno.curso.creditosTotais * 1000) / 10
-      : 0,
+    : 0,
     evidencias: {
       duasReprovacoesMesmaDisciplina: repetencia,
       todasReprovadasUltimoSemestre: null,
