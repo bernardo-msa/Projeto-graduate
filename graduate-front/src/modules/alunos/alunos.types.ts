@@ -25,6 +25,7 @@ export interface ReprovacaoPorDisciplina {
 export interface Triagem {
   situacao: SituacaoTriagem;
   totalReprovacoes: number;
+  creditosPendentes: number;
   reprovacoesPorDisciplina: ReprovacaoPorDisciplina[];
   percentualConcluido: number;
   evidencias: {

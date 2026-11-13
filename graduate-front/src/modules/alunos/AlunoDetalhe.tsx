@@ -66,7 +66,12 @@ export function AlunoDetalhe({ id, onClose, onChanged }: { id: string; onClose: 
 
           <div>
             <small>Créditos</small>
-            <strong>{aluno.creditosConcluidos}/{aluno.curso.creditosTotais}</strong>
+            <strong>
+              {aluno.creditosConcluidos}/{aluno.curso.creditosTotais}
+            </strong>
+            <small>
+              {aluno.triagem.creditosPendentes} pendentes
+            </small>
           </div>
 
           <div>
