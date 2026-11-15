@@ -6,6 +6,21 @@ import type { CreateAlunoDto, CreateAtendimentoDto, CreateTentativaDto } from '.
 
 const incluirHistorico = { curso: true, tentativas: { include: { disciplina: true } } } as const;
 
+function mapearDadosAluno(
+  dto: CreateAlunoDto,
+): Prisma.AlunoUncheckedCreateInput {
+  return {
+    matricula: dto.matricula,
+    nome: dto.nome,
+    email: dto.email || null,
+    cursoId: dto.cursoId,
+    periodoIngresso: dto.periodoIngresso,
+    modalidadeIngresso: dto.modalidadeIngresso,
+    cr: dto.cr,
+    creditosConcluidos: dto.creditosConcluidos,
+  };
+}
+
 @Injectable()
 export class AlunosService {
   constructor(private readonly prisma: PrismaService) {}
@@ -46,12 +61,9 @@ export class AlunosService {
       throw new BadRequestException('Créditos concluídos ultrapassam os exigidos');
     }
     try {
-      return await this.prisma.aluno.create({ data: {
-        matricula: dto.matricula, nome: dto.nome, email: dto.email || null,
-        cursoId: dto.cursoId, periodoIngresso: dto.periodoIngresso,
-        modalidadeIngresso: dto.modalidadeIngresso,
-        cr: dto.cr, creditosConcluidos: dto.creditosConcluidos,
-      } });
+      return await this.prisma.aluno.create({
+        data: mapearDadosAluno(dto),
+      });
     } catch (error) {
       if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002') {
         throw new ConflictException('Matrícula já cadastrada');
@@ -107,11 +119,14 @@ export class AlunosService {
       vistos.add(dto.matricula);
     }
     try {
-      await this.prisma.$transaction(dtos.map((dto) => this.prisma.aluno.create({ data: {
-        matricula: dto.matricula, nome: dto.nome, email: dto.email || null,
-        periodoIngresso: dto.periodoIngresso, modalidadeIngresso: dto.modalidadeIngresso,
-        cr: dto.cr, creditosConcluidos: dto.creditosConcluidos, cursoId: dto.cursoId,
-      } })));
+      await this.prisma.$transaction(
+        dtos.map((dto) =>
+          this.prisma.aluno.create({
+            data: mapearDadosAluno(dto),
+          }),
+        ),
+      );
+
       return { importados: dtos.length };
     } catch (error) {
       if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002') {
