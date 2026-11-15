@@ -292,3 +292,24 @@ Para calcular os percentuais **de partições e limites**, conforme pede o enunc
 - A mudança de **98,46% para 98,41%** entre a v2 original e a v2 final é uma diferença de percentual instrumentado que deve ser registrada, não uma redução comprovada de comportamento testado. O valor final permanece superior ao da v1.
 - Recomenda-se gerar e versionar um novo relatório de cobertura **v2-final** sem sobrescrever o relatório histórico da v2 com 95 testes.
 - **Revisão humana pendente de registro:** checar especialmente critérios institucionais, contagem formal de partições e limites e correspondência de subcasos parametrizados.
+
+
+### 8.4 Fechamento quantitativo da auditoria — suíte v2 com 121 testes (15/11/2026)
+
+**Nota histórica:** os quadros 8.1–8.3 documentam o estágio anterior, quando a v2 tinha 109 testes. A designação «v2 final» nessas seções refere-se àquele marco e não substitui este fechamento posterior. As seções 1–7 permanecem como planejamento original.
+
+A suíte v2 foi complementada progressivamente: **95 → 100 → 109 → 116 → 119 → 121** testes. A execução local apresentada da versão mais recente registrou **121/121 testes aprovados em dez arquivos**. Os dois últimos casos estão em `graduate-back/tests/v2/limites-creditos-curso.test.ts` e verificam explicitamente os pares **160/160** e **161/160** de CAD-F08.
+
+| Unidade operacionalizada (inventário) | v1 | v2 com 121 testes |
+|---|---:|---:|
+| Representantes de equivalência/condição | 28/50 (56,00%) | **50/50 (100,00%)** |
+| Representantes de valores-limite | 11/39 (28,21%) | **39/39 (100,00%)** |
+| Total de representantes | 39/89 (43,82%) | **89/89 (100,00%)** |
+| Cenários específicos da matriz | 16/51 integralmente | **51/51 integralmente** (segundo a auditoria por cenários) |
+| Critérios de aceitação derivados da matriz | 3/19 integralmente | **19/19 integralmente**, ressalvada homologação institucional |
+
+**Fonte da contagem por unidade:** `docs/testes/inventario_particoes_limites_final.md`, com uma linha e referência de evidência por representante. As 50 unidades de equivalência são *representantes operacionalizados de classes/condições* e as 39 unidades de limites são *fronteiras listadas no inventário*. Não se trata de cobertura exaustiva de todas as entradas nem de homologação institucional.
+
+**Cobertura estrutural:** com 119 testes, a execução observada apresentou 100% de linhas e 98,41% de branches no escopo instrumentado. Como a captura com 121 testes comprova apenas a aprovação dos testes, os índices de cobertura estrutural da execução com 121 devem ser medidos e registrados separadamente; não atribuir automaticamente o mesmo percentual.
+
+**Ressalva do requisito EP-10:** o caso de reprovação seguida de aprovação testa o comportamento atual (`POSSIVEL_EP`), não a conformidade com regulamento do NEAP.

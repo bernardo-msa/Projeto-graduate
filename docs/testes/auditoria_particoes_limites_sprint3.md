@@ -85,3 +85,11 @@ na matriz estejam cobertos.
 Permanece necessária a consolidação da contagem individual
 das partições e fronteiras, incluindo a verificação dos
 limites de 90 e 91 caracteres do campo modalidadeIngresso.
+
+## Encerramento do inventário quantitativo — 15/11/2026
+
+Após o marco de 116 testes, foram acrescentados os três testes de `limites-modalidade-ingresso.test.ts` (119 aprovados) e os dois de `limites-creditos-curso.test.ts` (121 aprovados). O último comando `npx vitest run tests/v2` apresentado pela equipe registrou **121 testes aprovados em dez arquivos**, sem falhas.
+
+O inventário nominal `docs/testes/inventario_particoes_limites_final.md` ficou com **50/50 representantes de equivalência/condição e 39/39 representantes de valores-limite identificados**, perfazendo **89/89 representantes operacionalizados**. Isso encerra as lacunas *desse inventário*, não implica prova de exaustividade, nem substitui homologação acadêmica.
+
+Os índices estruturais de 100% de linhas e 98,41% de branches correspondem à medição registrada com 119 testes; deve-se medir a execução com 121 antes de afirmar que esses números continuam idênticos. Os registros anteriores de 109 e 116 testes permanecem preservados como histórico.

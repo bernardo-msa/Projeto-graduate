@@ -17,8 +17,8 @@ Foram inventariadas as **24 famílias originalmente descritas** e a família com
 | Métrica | v1: verificados / previstos | v1 (%) | v2: verificados / previstos | v2 (%) |
 |---|---:|---:|---:|---:|
 | Representantes de equivalência / condição | 28/50 | 56.00% | 50/50 | 100.00% |
-| Valores de fronteira declarados | 11/39 | 28.21% | 37/39 | 94.87% |
-| **Total de representantes** | **39/89** | **43.82%** | **87/89** | **97.75%** |
+| Valores de fronteira declarados | 11/39 | 28.21% | 39/39 | 100.00% |
+| **Total de representantes** | **39/89** | **43.82%** | **89/89** | **100.00%** |
 
 ## Inventário por família (rastreável)
 
@@ -72,8 +72,8 @@ Foram inventariadas as **24 famílias originalmente descritas** e a família com
 | CAD-F07 | P | UUID válido/curso inexistente | cadastro-alunos.test.ts | cadastro-alunos.test.ts |
 | CAD-F07 | P | UUID inválido | — | limites-adicionais.test.ts |
 | CAD-F08 | L | 159 de 160 | — | fronteiras-pendentes.test.ts |
-| CAD-F08 | L | 160 de 160 | — |  |
-| CAD-F08 | L | 161 de 160 | — |  |
+| CAD-F08 | L | 160 de 160 | — | limites-creditos-curso.test.ts |
+| CAD-F08 | L | 161 de 160 | — | limites-creditos-curso.test.ts |
 | CAD-F09 | P | matrícula inédita | cadastro-alunos.test.ts | cadastro-alunos.test.ts |
 | CAD-F09 | P | matrícula duplicada P2002 | cadastro-alunos.test.ts | cadastro-alunos.test.ts |
 | CAD-F10 | L | modalidade 90 caracteres | — | limites-modalidade-ingresso.test.ts |
@@ -114,15 +114,15 @@ Foram inventariadas as **24 famílias originalmente descritas** e a família com
 | TEN-F08 | P | tentativa inédita | registro-tentativas.test.ts | registro-tentativas.test.ts |
 | TEN-F08 | P | tentativa duplicada P2002 | registro-tentativas.test.ts | registro-tentativas.test.ts |
 
-## Lacuna localizada
+## Lacuna identificada e posteriormente corrigida
 
-- **CAD-F08 — 160 e 161 créditos concluídos em curso de 160:** a suíte v2 contém aceitação de 12/12 e rejeição de excesso 40/30, mas **não contém os pares literais 160/160 e 161/160** previstos na matriz. Estes dois representantes ficam não verificados até haver testes específicos. A verificação de 159/160 já existe em `fronteiras-pendentes.test.ts`.
+- **CAD-F08 — 160 e 161 créditos concluídos em curso de 160:** a suíte v2 contém aceitação de 12/12 e rejeição de excesso 40/30, mas **não contém os pares literais 160/160 e 161/160** previstos na matriz. Esses dois representantes foram posteriormente verificados em `limites-creditos-curso.test.ts`, com asserções de persistência e rejeição. A verificação de 159/160 já existe em `fronteiras-pendentes.test.ts`.
 
 ## Limites de interpretação e pendências de requisitos
 
 - **Mesmo a eventual cobertura de 100% dos representantes deste inventário não significa cobertura universal de todas as entradas possíveis.** A matriz inclui expressões abertas como “tipo incorreto” e “outros formatos” sem especificar um conjunto exaustivo. O indicador se restringe aos representantes explicitamente operacionalizados e aos três de CAD-F10.
 - O percentual de classes é **por representante de partição/condição**, não por todas as classes matematicamente disjuntas possíveis. A denominação deve ser informada dessa forma no relatório crítico e não como “cobertura total de todas as partições imagináveis”.
-- A classificação é uma **inspeção estática** dos testes fornecidos; para afirmar conformidade institucional dos requisitos de EP é necessária revisão da equipe/NEAP. O caso EP-10 descreve comportamento atual, não regulamento.
+- A classificação das primeiras 119 verificações é uma **inspeção estática** dos testes fornecidos, complementada pela inspeção do arquivo adicional `limites-creditos-curso.test.ts` e pela evidência apresentada da execução de 121/121 testes; para afirmar conformidade institucional dos requisitos de EP é necessária revisão da equipe/NEAP. O caso EP-10 descreve comportamento atual, não regulamento.
 - O histórico deve ser preservado: v1 = 33; v2 original = 95; v2 com correções por cenário = 109; com correções de fronteiras = 116; após modalidade = 119 testes.
 - O relatório de cobertura estrutural da v2 original com 95 testes (98,46% branches) é diferente do atual com 119 (98,41% branches); a instrumentação pode alterar o denominador. Não substituir o documento histórico.
 - Em eventual revisão humana, vale verificar classes não especificadas em detalhe, como string versus número para CR e créditos, matrícula vazia, modalidades com 0 caracteres e comportamentos de integração real (fora do escopo unitário).
@@ -130,3 +130,13 @@ Foram inventariadas as **24 famílias originalmente descritas** e a família com
 ## Recomendação de atualização documental
 
 Acrescentar esta tabela como apêndice/ligação na seção 8 da `matriz-rastreabilidade.md` e atualizar **apenas a seção pós-execução**, mantendo intactas as seções 1–7 como registro histórico. Em `auditoria_particoes_limites_sprint3.md`, adicionar o resultado de 119/119 e referenciar este inventário; não apagar a análise anterior de 109 e 116.
+
+## Fechamento após execução da suíte com 121 testes (15/11/2026)
+
+A execução local apresentada pela equipe mostrou **121 testes aprovados em 10 arquivos**. Os dois casos de `limites-creditos-curso.test.ts` cobrem explicitamente os pares **160/160** (persistência permitida) e **161/160** (rejeição antes da persistência), com asserções específicas.
+
+- Representantes de equivalência/condição: **50/50 = 100,00%**.
+- Representantes numéricos de fronteira: **39/39 = 100,00%**.
+- Total de representantes operacionalizados: **89/89 = 100,00%**.
+
+Os denominadores seguem as definições da seção «Método e denominadores» e **não** significam cobertura exaustiva do domínio ou validação institucional das regras do NEAP. Resultados anteriores (33, 95, 109, 116, 119) permanecem registrados como marcos históricos. A porcentagem de branches **98,41%** é a última capturada antes da inclusão desses dois testes; recomenda-se executar uma última medição para confirmar o valor com 121 testes.
