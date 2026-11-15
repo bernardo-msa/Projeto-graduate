@@ -36,3 +36,33 @@ Antes de qualquer refatoração, em `graduate-back/`: `npx vitest run tests/v2`;
 ## Requisitos de registro
 
 Cada item refatorado exige commit separado com ID (`DT-01`, `DT-03`, `DT-06`), descrição antes/depois e testes antes/depois. A revisão humana deve registrar quais sugestões da LLM foram aceitas ou descartadas.
+
+## Situação final das dívidas técnicas — Sprint 3
+
+| ID | Dívida técnica | Situação | Referência |
+|---|---|---|---|
+| DT-01 | Concentração de responsabilidades na triagem | Corrigida | ef7f311 |
+| DT-02 | Número mágico na regra de repetência | Pendente | — |
+| DT-03 | Duplicação do mapeamento de dados de alunos | Corrigida | f834577 |
+| DT-04 | Repetição do tratamento de erros do Prisma | Pendente | — |
+| DT-05 | Importação com múltiplas responsabilidades | Pendente | — |
+| DT-06 | Componente React com responsabilidades concentradas | Corrigida | c4f0c6d |
+| DT-07 | Duplicação no tratamento de formulários | Pendente | — |
+| DT-08 | Estados dispersos e inconsistência na seleção de disciplina | Pendente | — |
+
+### Resumo
+
+- Dívidas técnicas identificadas: 8.
+- Dívidas técnicas corrigidas: 3.
+- Dívidas técnicas pendentes: 5.
+
+As três correções foram realizadas em commits independentes,
+utilizando as técnicas Extract Function e Extract Component.
+
+As cinco dívidas restantes foram mantidas no registro para
+possível tratamento em sprints futuras.
+
+A preservação do comportamento foi verificada pelos testes
+automatizados do backend e pelas compilações realizadas.
+A verificação visual do frontend deve ser registrada
+separadamente, após sua execução.
