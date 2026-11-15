@@ -40,16 +40,42 @@ A equipe selecionou US01 (triagem de Estudos Planejados), US02 (cadastro de alun
 
 **Evidências:** `tests/v2/`, `docs/testes/analise-lacunas-v1.md`, `docs/testes/relatorios/v2/resultado.txt`, `docs/testes/relatorios/v2/index.html`.
 
-## Auditoria posterior das duas versões
+## Auditoria posterior — evolução documentada até a v2 auditada
 
-A inspeção preliminar dos **51 cenários** da matriz apontou na v1 **16 explícitos / 19 parciais / 16 não localizados** e na v2 **37 explícitos / 9 parciais / 5 não localizados**. Essas contagens **não são** automaticamente a taxa de critérios cobertos, pois a matriz contém **19 critérios de aceitação**. Falta validar as classificações e computar separadamente percentuais de critérios, partições e limites. Ver `docs/testes/auditoria_rastreabilidade_v1_v2.md`.
+A auditoria inicial dos **51 cenários** da matriz classificou a v1 como **16 explícitos / 19 parciais / 16 sem teste específico**, e a v2 original (95 testes) como **37 explícitos / 9 parciais / 5 sem teste específico**. Essa classificação é histórica, anterior aos complementos; não deve ser descrita como a cobertura final. A matriz possui 19 critérios de aceitação e algumas linhas agrupam subcasos.
 
-## Pendências de reprodutibilidade e transparência
+As etapas seguintes também foram assistidas por GPT-6 e executadas pelo estudante. Os pedidos abaixo são trechos literais identificáveis na conversa; **não constituem a transcrição completa das respostas da LLM**.
 
-1. **Anexar as transcrições literais completas** dos prompts e respostas relevantes, exportadas do histórico do ChatGPT, especialmente das rodadas v1/v2. O pedido curto literal acima, isoladamente, não substitui todo o contexto acumulado e não cumpre integralmente a exigência do enunciado.
-2. Atualizar a matriz com cobertura de critérios, partições e limites, usando os testes existentes e seus oráculos; distinguir cobertura explícita de parcial.
-3. No relatório crítico, reconhecer as divergências em relação ao protocolo: assistência de IA na matriz, ausência de comentários de técnica/critério em parte da v1, ausência de intervenção corretiva por falha na v1.
-4. Preservar v1 inalterada e comparar ambas sob a **mesma configuração restrita** (`triagem.ts`, `validation.ts`, `alunos.service.ts`).
+| Marco | Pedido/atividade observável | Evidência de saída | Execução comunicada |
+|---|---|---|---|
+| 95 → 100 | Auditoria dos cinco cenários não localizados (EP-05, EP-10, EP-13, EP-14, EP-17) | `tests/v2/lacunas-triagem.test.ts` | 100/100 testes aprovados |
+| 100 → 109 | Auditoria de nove cenários parciais (EP-01, EP-02, EP-04, EP-07, EP-11, EP-15, CAD-01, CAD-07, TEN-14) | `tests/v2/auditoria-cenarios-parciais.test.ts` | 109/109 aprovados |
+| 109 → 116 | Partições/fronteiras planejadas não verificadas especificamente | `tests/v2/fronteiras-pendentes.test.ts` | 116/116 aprovados |
+| 116 → 119 | Limite de 90/91 caracteres e `trim()` em `modalidadeIngresso` | `tests/v2/limites-modalidade-ingresso.test.ts` | 119/119 aprovados |
+| 119 → 121 | Relação créditos concluídos/curso nos limites 160/160 e 161/160 | `tests/v2/limites-creditos-curso.test.ts` | 121/121 aprovados |
+
+**Pedidos literais identificados no histórico posterior:**
+
+> chat, eu entendo a metodologia pedida, mas dado o tempo acho que seria melhor se você escrevesse o que eu gostaria no teste, pra não perdemos tempo na parte da escrita, eu acho que o que você falou é bem relevante, pense em mais algumas dessas que podem ser relevante, se não houve não precisa, e então monte completamente a matriz de rastreabilidade
+
+> vamos fazer a geração da suite v1, não fiz nenhuma arquivo ainda
+
+> certo chat, antes de tudo, revise essa primeira etapa, veja oq fizemos, pense se falta fazer algo, se tem algo extra que podemos adicionar mas já fizemos o principal, salve na sua memória e dps continuamos, se houve algum ponto chave vamos fazer agora
+
+> chat, aqui esta tudo que fizemos, analise o que era pedido na sprint 3 e veja se ainda falta algo para fazermos
+
+Os pedidos breves como “vamos seguir chat” dependem de contexto anterior; isolá-los como prompts autossuficientes ocultaria as instruções efetivamente utilizadas. Os arquivos gerados pela LLM, o histórico dos commits e a conversa integral devem ser utilizados conjuntamente para reconstruir a interação.
+
+**Resultado final registrado pelo estudante em 15/11/2026:** 10 arquivos de teste, **121 testes aprovados**, cobertura no escopo de três módulos de **100% de linhas, 100% de funções e 98,41% de branches**. O inventário `docs/testes/inventario_particoes_limites_final.md` associa 50 representantes de equivalência/condição e 39 de fronteiras a testes. A conclusão de 100% refere-se **aos 89 representantes inventariados**, não a todo comportamento possível, nem substitui a validação institucional dos oráculos.
+
+**Nota metodológica:** a comparação experimental original é **v1 (33 testes) versus v2 original (95)**. O resultado **121** é uma **v2 posteriormente auditada e complementada**, não a saída inicial da segunda geração. Não reescrever retroativamente os registros da v1 ou da v2 original.
+
+## Pendências de reprodutibilidade e transparência (situação após a auditoria)
+
+1. **Pendente:** anexar/exportar integralmente os prompts, as respostas e os anexos relevantes da conversa original, ou disponibilizar um registro verificável equivalente. Este documento ainda é um índice analítico, não uma transcrição completa; não se deve inventar mensagens ou atribuir textos reconstruídos a prompts literais.
+2. **Documentado em artefatos separados:** matriz, auditorias dos 51 cenários, inventário de 89 representantes e relatório crítico final. Preservar a diferença entre critérios de aceitação, cenários, partições e limites.
+3. **Ressalvas preservadas:** a matriz teve assistência de IA; parte da v1 não identifica técnica/critério nos comentários; a v1 passou sem rodada de correção por falha; os testes usam mocks de persistência; o comportamento `POSSIVEL_EP` não substitui decisão do NEAP.
+4. **Reprodutibilidade:** preservar as duas suítes e os relatórios históricos originais, e registrar separadamente a medição final da v2 auditada.
 
 **Reprodução local, na pasta `graduate-back`:**
 

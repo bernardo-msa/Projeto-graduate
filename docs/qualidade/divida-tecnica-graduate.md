@@ -2,16 +2,16 @@
 
 **Escopo analisado:** `graduate-back/src/common/triagem.ts`, `graduate-back/src/common/validation.ts`, `graduate-back/src/modules/alunos/alunos.service.ts`, `graduate-front/src/modules/alunos/AlunoDetalhe.tsx` e `graduate-front/src/modules/alunos/AlunosPage.tsx`.
 
-**Método:** inspeção do código-fonte com apoio de GPT-6; os achados abaixo devem ser conferidos e aceitos pela equipe antes de serem considerados o diagnóstico definitivo. Não houve execução de analisador estático nesta etapa. **Status inicial:** Aberto. As referências a métodos e trechos são mais estáveis que números de linha.
+**Método:** inspeção do código-fonte com apoio de GPT-6. A tabela preserva o diagnóstico inicial (situação anterior às refatorações) e atualiza o status de execução. A validação humana formal de cada um dos oito achados deve ser registrada pela equipe; a implementação de três refatorações, isoladamente, não comprova essa revisão para todos os itens. Não houve execução de analisador estático nesta etapa. As referências a métodos e trechos são mais estáveis que números de linha.
 
-| ID | Local | Problema confirmado no código | Categoria | Consequência concreta | Identificação | Prioridade | Status |
+| ID | Local | Problema identificado no diagnóstico inicial | Categoria | Consequência concreta | Identificação | Prioridade | Status |
 |---|---|---|---|---|---|---|---|
-| DT-01 | `common/triagem.ts`, `triagem()` | A mesma função filtra e agrupa reprovações, decide a classificação EP, calcula indicadores de créditos e monta o DTO de resposta. | Coesão; SRP (candidato); Long Method | Uma alteração na regra de classificação ou no indicador curricular exige editar e revisar uma única rotina com diferentes razões para mudar. | Inspeção de código + LLM, a validar | Alta | Aberto |
+| DT-01 | `common/triagem.ts`, `triagem()` | A mesma função filtra e agrupa reprovações, decide a classificação EP, calcula indicadores de créditos e monta o DTO de resposta. | Coesão; SRP (candidato); Long Method | Uma alteração na regra de classificação ou no indicador curricular exige editar e revisar uma única rotina com diferentes razões para mudar. | Inspeção de código + LLM, a validar | Alta | Refatorado |
 | DT-02 | `common/triagem.ts`, condição `quantidadeReprovacoes >= 2` | O limite acadêmico `2` está embutido na comparação, sem nome explícito da regra. | Magic Number; integridade conceitual | Dificulta localizar e explicar a origem do limiar; uma mudança de regra depende de procurar a constante literal. | Inspeção de código + LLM, a validar | Baixa | Aberto |
-| DT-03 | `modules/alunos/alunos.service.ts`, `criar()` e `importar()` | O mapeamento `CreateAlunoDto -> data` para Prisma repete os mesmos campos em dois lugares. | Duplicated Code; coesão da transformação | Acrescentar campo de cadastro exige atualizar dois mapeamentos; omissão em um fluxo pode produzir inconsistência. | Inspeção de código + LLM, a validar | Alta | Aberto |
+| DT-03 | `modules/alunos/alunos.service.ts`, `criar()` e `importar()` | O mapeamento `CreateAlunoDto -> data` para Prisma repete os mesmos campos em dois lugares. | Duplicated Code; coesão da transformação | Acrescentar campo de cadastro exige atualizar dois mapeamentos; omissão em um fluxo pode produzir inconsistência. | Inspeção de código + LLM, a validar | Alta | Refatorado |
 | DT-04 | `modules/alunos/alunos.service.ts`, `criar()`, `registrarTentativa()` e `importar()` | Os blocos de captura de `PrismaClientKnownRequestError`/`P2002` e conversão em `ConflictException` se repetem, com mensagens próprias. | Duplicated Code; consistência de tratamento de erro | Ajustar a estratégia de tratamento exige mexer em três blocos; aumenta risco de comportamentos de erro inconsistentes. | Inspeção de código + LLM, a validar | Média | Aberto |
 | DT-05 | `modules/alunos/alunos.service.ts`, `importar()` | O método consulta cursos, valida dados, verifica duplicatas, monta operações, abre transação e converte erros. | Long Method; coesão | Alterar uma etapa da importação exige navegar por responsabilidades distintas na mesma rotina; difícil testar cada etapa isoladamente. | Inspeção de código + LLM, a validar | Média | Aberto |
-| DT-06 | `graduate-front/src/modules/alunos/AlunoDetalhe.tsx`, `AlunoDetalhe()` | Um único componente de ~213 linhas renderiza quatro abas, dois formulários e fluxo de persistência. | Large Component; baixa coesão; SRP (candidato) | Alterações visuais na aba EP ou no histórico podem causar regressões em outras abas e dificultam testes isolados. | Inspeção de código + LLM, a validar | Alta | Aberto |
+| DT-06 | `graduate-front/src/modules/alunos/AlunoDetalhe.tsx`, `AlunoDetalhe()` | Um único componente de ~213 linhas renderiza quatro abas, dois formulários e fluxo de persistência. | Large Component; baixa coesão; SRP (candidato) | Alterações visuais na aba EP ou no histórico podem causar regressões em outras abas e dificultam testes isolados. | Inspeção de código + LLM, a validar | Alta | Refatorado |
 | DT-07 | `AlunoDetalhe.tsx`, `salvarTentativa()` e `salvarAtendimento()` | Ambos os manipuladores repetem `preventDefault`, limpeza de feedback, controle `salvando`, `try/catch/finally` e `reload`. | Duplicated Code; complexidade de manutenção | Mudanças na política de feedback/erro devem ser replicadas; há risco de divergências futuras. | Inspeção de código + LLM, a validar | Média | Aberto |
 | DT-08 | `AlunoDetalhe.tsx`, estados e `salvarTentativa()` | O componente armazena numerosos estados de campos; `disciplinaId || disciplinasCurso[0]?.id` ainda possui fallback implícito, apesar de o `<select>` exigir escolha. | Estado disperso; acoplamento entre UI e regra de submissão; inconsistência conceitual | A validação da interface e a regra de submissão podem divergir; difícil rastrear a escolha efetivamente enviada. **Não alterar essa regra durante uma refatoração sem teste de caracterização.** | Inspeção de código + LLM, a validar | Média | Aberto |
 
@@ -25,7 +25,7 @@
 
 ## Linha de base exigida
 
-Antes de qualquer refatoração, em `graduate-back/`: `npx vitest run tests/v2`; resultado de referência observado anteriormente: **95 testes aprovados**. Em `graduate-front/`: `npm run build` para registrar a linha de base da interface; **ainda não verificado nesta etapa**. Depois de cada commit, executar de novo os testes aplicáveis e anotar resultados em `docs/qualidade/relatorio-refatoracao.md`.
+**Linha de base histórica:** antes das refatorações, a suíte v2 registrava **95 testes aprovados**. Foram executadas verificações de build do backend e do frontend durante o trabalho de refatoração; os registros específicos estão em `docs/qualidade/evidencias-refatoracao.md`. **Auditoria posterior (15/11/2026):** a suíte v2 foi ampliada para **121 testes aprovados**, com 100% de linhas e 98,41% de branches no escopo instrumentado. Esses 121 testes não devem ser apresentados como resultado anterior às refatorações. A aba Análise EP também foi verificada manualmente em 15/11/2026, conforme o registro de evidências.
 
 ## Achados descartados / cautelas
 
@@ -33,9 +33,18 @@ Antes de qualquer refatoração, em `graduate-back/`: `npx vitest run tests/v2`;
 - Dependência do `AlunosService` em `PrismaService` não basta, isoladamente, para afirmar violação de DIP, especialmente porque o NestJS já injeta a dependência. Não incluído sem evidência de dificuldade concreta.
 - `triagem()` declarar critérios não avaliados como `null` é limitação funcional assumida do MVP, não necessariamente dívida de refatoração; alterar isso modificaria comportamento.
 
-## Requisitos de registro
+## Requisitos de registro e revisão humana
 
-Cada item refatorado exige commit separado com ID (`DT-01`, `DT-03`, `DT-06`), descrição antes/depois e testes antes/depois. A revisão humana deve registrar quais sugestões da LLM foram aceitas ou descartadas.
+Cada item refatorado exige commit separado com ID (`DT-01`, `DT-03`, `DT-06`), descrição antes/depois e testes antes/depois. Os registros das alterações constam em `docs/qualidade/evidencias-refatoracao.md`.
+
+**Situação da validação humana:** a equipe realizou e documentou intervenções e verificações relativas às refatorações DT-01, DT-03 e DT-06, incluindo testes, builds e inspeção visual da DT-06. Ainda não há neste documento uma confirmação individual, atribuída a um integrante da equipe, dos oito diagnósticos iniciais. Para não confundir sugestões de IA com parecer humano, a confirmação abaixo deve ser preenchida somente após inspeção direta do código.
+
+| Achados | Evidência de tratamento | Confirmação humana individual do diagnóstico |
+|---|---|---|
+| DT-01, DT-03 e DT-06 | Refatorações aplicadas, com commits e validações registrados abaixo | Registrar responsável e data da revisão do problema original |
+| DT-02, DT-04, DT-05, DT-07 e DT-08 | Permanecem como dívidas técnicas propostas para tratamento futuro | Pendente de registro da confirmação pela equipe |
+
+**Registro de confirmação a completar pela equipe:** para cada DT-01 a DT-08, anotar o nome do revisor, a data, a decisão (confirmado, ajustado ou descartado) e, se necessário, a justificativa. Os três achados descartados na seção anterior refletem cautelas de análise, não devem ser apresentados como decisões individuais assinadas pela equipe sem evidência correspondente.
 
 ## Situação final das dívidas técnicas — Sprint 3
 
@@ -64,5 +73,4 @@ possível tratamento em sprints futuras.
 
 A preservação do comportamento foi verificada pelos testes
 automatizados do backend e pelas compilações realizadas.
-A verificação visual do frontend deve ser registrada
-separadamente, após sua execução.
+A verificação visual do frontend foi **aprovada em 15/11/2026**: o Graduate iniciou no ambiente local e a aba Análise EP exibiu os critérios acadêmicos, as reprovações e os avisos do NEAP. Essa verificação manual foi registrada em `docs/qualidade/evidencias-refatoracao.md` e não equivale a uma suíte automatizada de testes de interface.

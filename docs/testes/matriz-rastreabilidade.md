@@ -200,3 +200,116 @@ As regras foram conferidas no código-fonte entregue (`graduate-back/src/common/
 - [ ] Salvamos e fizemos o commit desta matriz **antes** de solicitar à LLM a geração da suíte v1.
 
 *Esta matriz é um artefato de projeto pré-teste. As colunas de execução e cobertura permanecerão em branco até haver evidência real dos testes.*
+
+## 8. Auditoria pós-execução — atualização de 15/11/2026
+
+> **Preservação histórica:** as seções 1–7 representam o planejamento original, produzido antes da geração da suíte v1. Esta seção foi acrescida posteriormente, após a auditoria das asserções e a criação de 14 testes específicos. Não atribui retrospectivamente à equipe uma revisão humana ainda não documentada.
+
+**Evidência de execução:** captura local do Vitest em 15/11/2026: v2 com **109 testes aprovados em 7 arquivos**, sem falhas. Cobertura V8 após a complementação: **100% de linhas, 98,41% de branches, 100% de funções e 100% de instruções** nos três módulos configurados. A execução da v1 documentada anteriormente foi de **33/33**, com **61,42% de linhas e 58,46% de branches**. A versão v2 anterior à auditoria tinha **95/95** testes e **98,46% de branches**.
+
+**Regra de classificação para as linhas da matriz:** `E` = todas as condições específicas daquela linha têm asserções identificáveis; `P` = verificação parcial; `N` = cenário não identificado. Os valores da v1 são mantidos conforme a auditoria original; as 14 linhas corrigidas foram verificadas por testes específicos adicionados à v2. A coluna de evidência indica o arquivo de teste, não prova automaticamente equivalência ao requisito institucional.
+
+### 8.1 Rastreabilidade por cenário (51 linhas)
+
+| Cenário | Critério(s) | v1 | v2 final | Evidência principal na v2 |
+|---|---|:---:|:---:|---|
+| EP-01 | CA01, CA05 | P | E | `graduate-back/tests/v2/auditoria-cenarios-parciais.test.ts` |
+| EP-02 | CA01, CA05 | P | E | `graduate-back/tests/v2/auditoria-cenarios-parciais.test.ts` |
+| EP-03 | CA02 | E | E | `graduate-back/tests/v2/triagem.test.ts` |
+| EP-04 | CA03 | P | E | `graduate-back/tests/v2/auditoria-cenarios-parciais.test.ts` |
+| EP-05 | CA03 | N | E | `graduate-back/tests/v2/lacunas-triagem.test.ts` |
+| EP-06 | CA02 | E | E | `graduate-back/tests/v2/triagem.test.ts` |
+| EP-07 | CA02, CA04 | P | E | `graduate-back/tests/v2/auditoria-cenarios-parciais.test.ts` |
+| EP-08 | CA03, CA05 | E | E | `graduate-back/tests/v2/triagem.test.ts` |
+| EP-09 | CA02, CA05 | E | E | `graduate-back/tests/v2/triagem.test.ts` |
+| EP-10 | CA03, CA04 | N | E | `graduate-back/tests/v2/lacunas-triagem.test.ts` |
+| EP-11 | CA04, CA05 | P | E | `graduate-back/tests/v2/auditoria-cenarios-parciais.test.ts` |
+| EP-12 | CA06 | E | E | `graduate-back/tests/v2/triagem.test.ts` |
+| EP-13 | CA06 | N | E | `graduate-back/tests/v2/lacunas-triagem.test.ts` |
+| EP-14 | CA06 | N | E | `graduate-back/tests/v2/lacunas-triagem.test.ts` |
+| EP-15 | CA06 | P | E | `graduate-back/tests/v2/auditoria-cenarios-parciais.test.ts` |
+| EP-16 | CA06 | E | E | `graduate-back/tests/v2/triagem.test.ts` |
+| EP-17 | CA06 | N | E | `graduate-back/tests/v2/lacunas-triagem.test.ts` |
+| EP-18 | CA07 | E | E | `graduate-back/tests/v2/triagem.test.ts` |
+| CAD-01 | CA01–CA05 | P | E | `graduate-back/tests/v2/auditoria-cenarios-parciais.test.ts` |
+| CAD-02 | CA01 | E | E | `graduate-back/tests/v2/cadastro-alunos.test.ts` |
+| CAD-03 | CA01 | P | E | `graduate-back/tests/v2/limites-adicionais.test.ts` |
+| CAD-04 | CA01 | N | E | `graduate-back/tests/v2/limites-adicionais.test.ts` |
+| CAD-05 | CA01 | N | E | `graduate-back/tests/v2/limites-adicionais.test.ts` |
+| CAD-06 | CA01 | P | E | `graduate-back/tests/v2/limites-adicionais.test.ts` |
+| CAD-07 | CA01 | P | E | `graduate-back/tests/v2/auditoria-cenarios-parciais.test.ts` |
+| CAD-08 | CA03 | P | E | `graduate-back/tests/v2/limites-adicionais.test.ts` |
+| CAD-09 | CA03 | P | E | `graduate-back/tests/v2/limites-adicionais.test.ts` |
+| CAD-10 | CA02 | P | E | `graduate-back/tests/v2/limites-adicionais.test.ts` |
+| CAD-11 | CA02 | P | E | `graduate-back/tests/v2/limites-adicionais.test.ts` |
+| CAD-12 | CA02 | N | E | `graduate-back/tests/v2/limites-adicionais.test.ts` |
+| CAD-13 | CA03 | N | E | `graduate-back/tests/v2/limites-adicionais.test.ts` |
+| CAD-14 | CA04 | E | E | `graduate-back/tests/v2/cadastro-alunos.test.ts` |
+| CAD-15 | CA04 | N | E | `graduate-back/tests/v2/servicos-adicionais.test.ts` |
+| CAD-16 | CA04 | E | E | `graduate-back/tests/v2/cadastro-alunos.test.ts` |
+| CAD-17 | CA05 | N | E | `graduate-back/tests/v2/servicos-adicionais.test.ts` |
+| CAD-18 | CA06 | E | E | `graduate-back/tests/v2/cadastro-alunos.test.ts` |
+| TEN-01 | CA01, CA05 | E | E | `graduate-back/tests/v2/registro-tentativas.test.ts` |
+| TEN-02 | CA02 | P | E | `graduate-back/tests/v2/limites-adicionais.test.ts` |
+| TEN-03 | CA02 | P | E | `graduate-back/tests/v2/limites-adicionais.test.ts` |
+| TEN-04 | CA01 | P | E | `graduate-back/tests/v2/limites-adicionais.test.ts` |
+| TEN-05 | CA01 | P | E | `graduate-back/tests/v2/limites-adicionais.test.ts` |
+| TEN-06 | CA01 | N | E | `graduate-back/tests/v2/limites-adicionais.test.ts` |
+| TEN-07 | CA03 | E | E | `graduate-back/tests/v2/registro-tentativas.test.ts` |
+| TEN-08 | CA03 | N | E | `graduate-back/tests/v2/servicos-adicionais.test.ts` |
+| TEN-09 | CA03 | E | E | `graduate-back/tests/v2/registro-tentativas.test.ts` |
+| TEN-10 | CA04 | P | E | `graduate-back/tests/v2/registro-tentativas.test.ts + servicos-adicionais.test.ts` |
+| TEN-11 | CA04, CA05 | E | E | `graduate-back/tests/v2/registro-tentativas.test.ts` |
+| TEN-12 | CA04, CA05 | N | E | `graduate-back/tests/v2/servicos-adicionais.test.ts` |
+| TEN-13 | CA05 | N | E | `graduate-back/tests/v2/servicos-adicionais.test.ts` |
+| TEN-14 | CA05 | N | E | `graduate-back/tests/v2/auditoria-cenarios-parciais.test.ts` |
+| TEN-15 | CA06 | E | E | `graduate-back/tests/v2/registro-tentativas.test.ts` |
+
+**Contagem de cenários:** v1 = **16 E / 19 P / 16 N** (51 linhas); v2 final = **51 E / 0 P / 0 N** (51 linhas), segundo esta classificação *por cenário*. A v2 final reutiliza os 95 testes prévios e acrescenta 5 testes em `lacunas-triagem.test.ts` e 9 em `auditoria-cenarios-parciais.test.ts`. As linhas com subcasos devem ser interpretadas juntamente com os testes parametrizados, não como um único valor de entrada.
+
+### 8.2 Critérios de aceitação, partições e limites
+
+O escopo possui **19 critérios de aceitação**: sete de triagem, seis de cadastro e seis de registro de tentativa. Na classificação conservadora abaixo, um critério só é considerado **completamente coberto** quando todas as linhas da matriz associadas a ele estão marcadas E. Trata-se de uma métrica *derivada da matriz*, distinta da cobertura de linhas/branches do V8 e sujeita à validação final dos requisitos pela equipe/NEAP.
+
+| Indicador | v1 | v2 final | Método/ressalva |
+|---|---:|---:|---|
+| Testes aprovados | 33/33 | 109/109 | Vitest; zero falhas observadas |
+| Cobertura de linhas | 61,42% | 100% | V8, módulos selecionados |
+| Cobertura de branches | 58,46% | 98,41% | V8, módulos selecionados |
+| Critérios completamente cobertos na matriz | 3/19 | 19/19 | Regra conservadora: todas as linhas do critério = E |
+| Cenários completamente verificados | 16/51 | 51/51 | Inspeção da matriz e dos testes, com subcasos |
+| Partições e limites | Não consolidado | **Revisão final necessária** | Não existe inventário numerado único de partições/limites no planejamento inicial; não inventar denominadores |
+
+**Importante:** `19/19` não equivale a homologação dos critérios institucionais. Em particular, EP-10 preserva o comportamento implementado (`POSSIVEL_EP` após aprovação posterior), cuja adequação ao regulamento do NEAP permanece pendente de validação. Os testes unitários usam mocks e não validam integração real com banco, Keycloak ou SIGAA.
+
+Para calcular os percentuais **de partições e limites**, conforme pede o enunciado, a equipe ainda deve identificar individualmente cada classe/fronteira das tabelas das seções 2–4, contar quais têm um caso com entrada e asserção correspondentes e registrar numerador e denominador. Não é metodologicamente correto usar `51/51` como substituto desses indicadores.
+
+### 8.3 Auditoria complementar e rastreabilidade das mudanças
+
+- **EP-05, EP-10, EP-13, EP-14, EP-17:** novos testes em `lacunas-triagem.test.ts` (5 casos).
+- **EP-01, EP-02, EP-04, EP-07, EP-11, EP-15, CAD-01, CAD-07, TEN-14:** novos testes em `auditoria-cenarios-parciais.test.ts` (9 casos).
+- **Sem alteração da suíte v1** nem das regras de produção para corrigir a matriz.
+- A mudança de **98,46% para 98,41%** entre a v2 original e a v2 final é uma diferença de percentual instrumentado que deve ser registrada, não uma redução comprovada de comportamento testado. O valor final permanece superior ao da v1.
+- Recomenda-se gerar e versionar um novo relatório de cobertura **v2-final** sem sobrescrever o relatório histórico da v2 com 95 testes.
+- **Revisão humana pendente de registro:** checar especialmente critérios institucionais, contagem formal de partições e limites e correspondência de subcasos parametrizados.
+
+
+### 8.4 Fechamento quantitativo da auditoria — suíte v2 com 121 testes (15/11/2026)
+
+**Nota histórica:** os quadros 8.1–8.3 documentam o estágio anterior, quando a v2 tinha 109 testes. A designação «v2 final» nessas seções refere-se àquele marco e não substitui este fechamento posterior. As seções 1–7 permanecem como planejamento original.
+
+A suíte v2 foi complementada progressivamente: **95 → 100 → 109 → 116 → 119 → 121** testes. A execução local apresentada da versão mais recente registrou **121/121 testes aprovados em dez arquivos**. Os dois últimos casos estão em `graduate-back/tests/v2/limites-creditos-curso.test.ts` e verificam explicitamente os pares **160/160** e **161/160** de CAD-F08.
+
+| Unidade operacionalizada (inventário) | v1 | v2 com 121 testes |
+|---|---:|---:|
+| Representantes de equivalência/condição | 28/50 (56,00%) | **50/50 (100,00%)** |
+| Representantes de valores-limite | 11/39 (28,21%) | **39/39 (100,00%)** |
+| Total de representantes | 39/89 (43,82%) | **89/89 (100,00%)** |
+| Cenários específicos da matriz | 16/51 integralmente | **51/51 integralmente** (segundo a auditoria por cenários) |
+| Critérios de aceitação derivados da matriz | 3/19 integralmente | **19/19 integralmente**, ressalvada homologação institucional |
+
+**Fonte da contagem por unidade:** `docs/testes/inventario_particoes_limites_final.md`, com uma linha e referência de evidência por representante. As 50 unidades de equivalência são *representantes operacionalizados de classes/condições* e as 39 unidades de limites são *fronteiras listadas no inventário*. Não se trata de cobertura exaustiva de todas as entradas nem de homologação institucional.
+
+**Cobertura estrutural:** com 119 testes, a execução observada apresentou 100% de linhas e 98,41% de branches no escopo instrumentado. Como a captura com 121 testes comprova apenas a aprovação dos testes, os índices de cobertura estrutural da execução com 121 devem ser medidos e registrados separadamente; não atribuir automaticamente o mesmo percentual.
+
+**Ressalva do requisito EP-10:** o caso de reprovação seguida de aprovação testa o comportamento atual (`POSSIVEL_EP`), não a conformidade com regulamento do NEAP.
