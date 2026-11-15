@@ -52,7 +52,10 @@
 - Build TypeScript aprovado.
 - Build Vite aprovado.
 - `git diff --check` sem erros.
-- Verificação visual da interface: pendente de confirmação no registro.
+- Verificação visual da interface: APROVADA em 15/11/2026.
+- O Graduate iniciou corretamente no ambiente local.
+- A aba Análise EP apresentou os critérios acadêmicos, o histórico de reprovações e os avisos do NEAP.
+- Não foram identificadas regressões visuais ou funcionais durante essa verificação manual.
 
 **Resultado:** redução do tamanho do componente principal e melhor separação das responsabilidades de apresentação.
 
