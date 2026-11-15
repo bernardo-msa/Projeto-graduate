@@ -31,20 +31,22 @@ A LLM auxiliou a identificar oito candidatos, descritos em `docs/qualidade/divid
 | DT-07 | `AlunoDetalhe.tsx`: fluxos semelhantes de feedback, salvamento e tratamento de erros dos formulários. | Mantida como dívida de prioridade média. | Registro de dívida técnica; sem refatoração. | **A registrar pela equipe.** |
 | DT-08 | `AlunoDetalhe.tsx`: estados dispersos e fallback `disciplinaId || disciplinasCurso[0]?.id`. | Mantida como dívida de prioridade média; qualquer mudança exige caracterização prévia. | Registro de dívida técnica; sem refatoração. | **A registrar pela equipe.** |
 
-### Procedimento de confirmação humana
+### Revisão crítica apresentada e concordância humana registrada
 
-Para cada linha, um integrante deve abrir o trecho indicado, conferir se o problema e sua consequência descrita realmente existiam na versão analisada e registrar a decisão como **confirmado**, **confirmado com ressalva** ou **descartado**. Se houver correção de diagnóstico, atualizar também o relatório de dívida técnica. Registrar nome ou identificação do revisor, data e, quando útil, o commit ou trecho examinado. **Não preencher retroativamente sem ter feito a verificação.**
+As conclusões a seguir foram expostas à equipe como avaliação preliminar e um integrante manifestou concordância expressa. Para uma **validação independente de código**, ainda é recomendável abrir os trechos na versão analisada e registrar responsável e evidência; a concordância com a interpretação da LLM não deve ser apresentada como inspeção independente.
 
-| ID | Decisão humana (confirmado / ressalva / descartado) | Justificativa ou correção | Revisor e data |
+| ID | Avaliação aceita pelo integrante da equipe | Fundamentação da decisão | Registro |
 |---|---|---|---|
-| DT-01 | A preencher | A preencher | A preencher |
-| DT-02 | A preencher | A preencher | A preencher |
-| DT-03 | A preencher | A preencher | A preencher |
-| DT-04 | A preencher | A preencher | A preencher |
-| DT-05 | A preencher | A preencher | A preencher |
-| DT-06 | A preencher | A preencher | A preencher |
-| DT-07 | A preencher | A preencher | A preencher |
-| DT-08 | A preencher | A preencher | A preencher |
+| DT-01 | **Confirmado** | A função reunia identificação/agrupamento de reprovações, classificação e indicadores curriculares; a extração explicitou responsabilidades. A quantidade de operações, isoladamente, não prova violação de SRP. | Concordância registrada na conversa em 15/11/2026. |
+| DT-02 | **Confirmado com ressalva — baixa prioridade** | O literal `2` representa um limiar de domínio; uma constante nomeada facilitaria a explicitação da regra, mas o impacto de manutenção é limitado. | Concordância registrada na conversa em 15/11/2026. |
+| DT-03 | **Confirmado** | O mapeamento duplicado em `criar()` e `importar()` elevava o risco de divergência ao adicionar campos; `mapearDadosAluno()` centralizou a conversão. | Concordância registrada na conversa em 15/11/2026. |
+| DT-04 | **Confirmado parcialmente — sem refatoração prioritária** | Há repetição do padrão de tratamento de `P2002`, mas mensagens e contextos de erro diferentes podem justificar blocos separados. Não foi demonstrado ganho líquido de uma abstração. | Concordância registrada na conversa em 15/11/2026. |
+| DT-05 | **Confirmado com ressalva — melhoria condicional** | `importar()` reúne consulta, validações e transação, porém as etapas pertencem a um mesmo caso de uso; pluralidade de etapas não comprova violação de SRP. | Concordância registrada na conversa em 15/11/2026. |
+| DT-06 | **Confirmado** | A apresentação da Análise EP estava acoplada a uma página extensa. A extração para `AlunoAnaliseEP.tsx` separou responsabilidades de apresentação, sem resolver toda a complexidade da página. | Concordância registrada na conversa em 15/11/2026. |
+| DT-07 | **Confirmado parcialmente — sem refatoração prioritária** | Os manipuladores de formulários repetem padrões, mas representam fluxos diferentes; uma abstração poderia aumentar a complexidade. | Concordância registrada na conversa em 15/11/2026. |
+| DT-08 | **Confirmado como risco — requer teste de caracterização** | O fallback `disciplinaId || disciplinasCurso[0]?.id` pode submeter a primeira disciplina quando não há escolha explícita, criando risco de desencontro entre interface e intenção do usuário. Não foi afirmado defeito reproduzido. | Concordância registrada na conversa em 15/11/2026. |
+
+**Natureza da confirmação:** após receber a análise crítica individual apresentada pela LLM, um integrante da equipe declarou na conversa: **“chat, concordo com suas interpretações”**. Isso registra concordância humana com os argumentos e a priorização, **não comprova uma inspeção independente de todos os trechos no editor, nem validação pelos demais integrantes**. A equipe poderá complementar este registro com nomes e evidências de inspeção própria, se exigidos pela avaliação.
 
 ## 4. Revisão crítica: potenciais falsos positivos descartados
 
@@ -59,6 +61,6 @@ A principal contribuição da LLM foi **apontar locais e categorias candidatos a
 - **No momento das refatorações DT-01 e DT-03:** a suíte v2 então existente executou **95/95** testes; há registros de build do backend. Para DT-06, há registro de build do frontend e da posterior verificação visual da aba Análise EP em 15/11/2026.
 - **Em auditoria posterior:** a suíte v2 ampliada executou **121/121** testes, segundo os resultados de terminal registrados; essa contagem **não** deve ser atribuída às execuções históricas imediatamente após as refatorações.
 - Os testes de backend não constituem prova de integração real com banco de dados, Keycloak ou teste automatizado dos componentes React.
-- **Pendente para encerramento metodológico:** realizar e registrar a revisão humana individual na tabela acima. A conclusão de três refatorações não autoriza declarar os oito achados humanamente confirmados.
+- **Situação metodológica:** a concordância de um integrante com as oito interpretações foi registrada na tabela acima. Ainda não há comprovação de inspeção independente, item a item, nem manifestação dos demais integrantes. Os commits demonstram as três intervenções, não a revisão autônoma de todos os diagnósticos.
 
 **Artefatos correlatos:** `docs/qualidade/divida-tecnica-graduate.md`, `docs/qualidade/evidencias-refatoracao.md`, `docs/qualidade/graduate_sprint3_relatorio_refatoracao.pdf` e histórico Git dos commits `ef7f311`, `f834577` e `c4f0c6d`.
