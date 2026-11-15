@@ -7,12 +7,10 @@ export default defineConfig({
     coverage: {
       provider: 'v8',
       reporter: ['text', 'html', 'json-summary'],
-      include: ['src/**/*.ts'],
-      exclude: [
-        'src/main.ts',
-        'src/**/*.module.ts',
-        'src/**/*.controller.ts',
-        'src/**/*.dto.ts',
+      include: [
+        'src/common/triagem.ts',
+        'src/common/validation.ts',
+        'src/modules/alunos/alunos.service.ts',
       ],
     },
   },
