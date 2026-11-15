@@ -1,0 +1,29 @@
+(!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+  - ESM syntax in a file loaded as CommonJS (vitest.config.ts:1:1). Use a `.mjs` extension or set `"type": "module"` in the closest package.json
+Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.1.0 [39m[90m/home/bernardo/Downloads/Graduate_MVP_Projeto_Completo/graduate-mvp/graduate-back[39m
+      [2mCoverage enabled with [22m[33mv8[39m
+
+ [32m✓[39m tests/v2/triagem.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 23[2mms[22m[39m
+ [32m✓[39m tests/v2/servicos-adicionais.test.ts [2m([22m[2m20 tests[22m[2m)[22m[32m 34[2mms[22m[39m
+ [32m✓[39m tests/v2/limites-adicionais.test.ts [2m([22m[2m42 tests[22m[2m)[22m[32m 24[2mms[22m[39m
+ [32m✓[39m tests/v2/registro-tentativas.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 24[2mms[22m[39m
+ [32m✓[39m tests/v2/cadastro-alunos.test.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 26[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m5 passed[39m[22m[90m (5)[39m
+[2m      Tests [22m [1m[32m95 passed[39m[22m[90m (95)[39m
+[2m   Start at [22m 10:21:35
+[2m   Duration [22m 1.14s[2m (import 83%, worker 8%, tests 5%, transform 4%)[22m
+
+[34m % [39m[2mCoverage report from [22m[33mv8[39m
+-------------------|---------|----------|---------|---------|-------------------
+File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+-------------------|---------|----------|---------|---------|-------------------
+All files          |     100 |    98.46 |     100 |     100 |                   
+ common            |     100 |      100 |     100 |     100 |                   
+  triagem.ts       |     100 |      100 |     100 |     100 |                   
+  validation.ts    |     100 |      100 |     100 |     100 |                   
+ modules/alunos    |     100 |    98.11 |     100 |     100 |                   
+  ...os.service.ts |     100 |    98.11 |     100 |     100 | 9                 
+-------------------|---------|----------|---------|---------|-------------------
